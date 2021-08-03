@@ -6,6 +6,7 @@ import Directory from "./DirectoryComponent";
 import Constants from "expo-constants";
 import CampsiteInfo from "./CampsiteInfoComponent";
 import Reservation from "./ReservationComponent";
+import Favorites from "./FavoritesComponent";
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
@@ -138,6 +139,28 @@ const ReservationNavigator = createStackNavigator(
   }
 );
 
+const FavoritesNavigator = createStackNavigator(
+  {
+    Favorites: { screen: Favorites },
+  },
+  {
+    defaultNavigationOptions: ({navigation}) => ({
+        headerStyle: {
+        backgroundColor: "#5637DD",
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        color: "#fff",
+      },
+      headerLeft: <Icon
+                name='heart'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()} />
+    })
+  }
+);
+
 const CustomDrawerContentComponent = props => (
     <ScrollView>
         <SafeAreaView
@@ -197,6 +220,19 @@ const MainNavigator = createDrawerNavigator(
           )
       }       
   },
+  Favorites: { 
+    screen: FavoritesNavigator,
+    navigationOptions: {
+        drawerLabel: 'My Favorites',
+        drawerIcon: ({tintColor}) => (
+            <Icon
+                name='heart'
+                type='font-awesome'
+                size={24}
+                color={tintColor} />
+        )
+    }       
+},
     Contact: { 
         screen: ContactNavigator,
         navigationOptions: {
