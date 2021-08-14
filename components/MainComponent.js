@@ -306,6 +306,14 @@ const MainNavigator = createDrawerNavigator(
 const AppNavigator = createAppContainer(MainNavigator);
 
 class Main extends Component {
+
+  showNetInfo = async () => {
+    await NetInfo.fetch().then(connectionInfo => {
+    (Platform.OS === 'ios')
+    ? Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
+    : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
+    })
+  }
    
    componentDidMount() {
      this.props.fetchCampsites();
@@ -313,15 +321,12 @@ class Main extends Component {
      this.props.fetchPromotions();
      this.props.fetchPartners();
 
-     NetInfo.fetch().then(connectionInfo => {
-       (Platform.OS === 'ios')
-       ? Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
-       : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
-     });
+          
+     this.showNetInfo();
 
-     this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
-       this.handleConnectivityChange(connectionInfo);
-     });
+    this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
+    this.handleConnectivityChange(connectionInfo);
+   });
    }
 
    componentWillUnmount() {
